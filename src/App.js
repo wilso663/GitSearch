@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
 import UserSearch from './components/users/UserSearch';
+import Alert from './components/layout/Alert';
 import axios from 'axios';
 import './App.css';
 
 class App extends React.Component {
   state = {
     users: [],
-    loading: false
+    loading: false,
+    alert: null
   };
   //Populate view with initial 30 users
   /*   async componentDidMount() {
@@ -34,6 +36,12 @@ class App extends React.Component {
   //Clear Users from state
   clearUsers = () => this.setState({ users: [], loading: false });
 
+  //Set Alert when empty text is submitted
+  setAlert = (msg, type) => {
+    this.setState({ alert: { msg: msg, type: type } });
+    setTimeout(() => this.setState({ alert: null }), 5000);
+  };
+
   render() {
     const { users, loading } = this.state;
 
@@ -41,10 +49,12 @@ class App extends React.Component {
       <div className="app">
         <Navbar />
         <div className="container">
+          <Alert alert={this.state.alert} />
           <UserSearch
             searchUsers={this.searchUsers}
             clearUsers={this.clearUsers}
             showClear={users.length > 0 ? true : false}
+            setAlert={this.setAlert}
           />
           <Users loading={loading} users={users} />
         </div>
